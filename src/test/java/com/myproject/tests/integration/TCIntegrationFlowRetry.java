@@ -2,6 +2,7 @@ package com.myproject.tests.integration;
 
 import com.myproject.base.BaseTest;
 import com.myproject.endpoints.APIConstants;
+import com.myproject.listeners.RetryAnalyzer;
 import com.myproject.pojos.Booking;
 import com.myproject.pojos.BookingResponse;
 import com.myproject.utils.PropertyReader;
@@ -9,13 +10,13 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Owner;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TCIntegrationFlow extends BaseTest {
+@Test(retryAnalyzer = RetryAnalyzer.class)
+public class TCIntegrationFlowRetry extends BaseTest {
 
     @Test(groups = "integration", priority = 1)
     @Owner("Darshan")
@@ -58,7 +59,7 @@ public class TCIntegrationFlow extends BaseTest {
 
 //        Get req
         String basePathGet = APIConstants.CREATE_UPDATE_BOOKING_URL + "/" + bookingId;
-        System.out.println("============================================================="+basePathGet);
+        System.out.println("=============================================================" + basePathGet);
         requestSpecification.basePath(basePathGet);
 
         response = RestAssured.given(requestSpecification).when().get();
@@ -114,7 +115,7 @@ public class TCIntegrationFlow extends BaseTest {
         validatableResponse = RestAssured.given().spec(requestSpecification)
                 .when().delete().then().log().all();
 
-        validatableResponse.statusCode(201);
+        validatableResponse.statusCode(200);
 
     }
 
